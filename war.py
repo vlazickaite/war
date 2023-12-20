@@ -46,12 +46,20 @@ class Player:
         self.ID = ID
         self.player_card_deck = player_card_deck
         
-        
     def play_card(self):
         #from player card card take the first card from the list
         card = self.player_card_deck[0]
         self.player_card_deck.pop(0)
         return card
+    
+    def take_cards(self, won_cards):
+        print("pries pridedant laimetas kortas", self.player_card_deck)
+        self.player_card_deck.append(won_cards)
+        print("po pridedimo laimetu kortu", self.player_card_deck)
+        
+        
+        
+        
         
         
 
@@ -64,11 +72,13 @@ class Game:
     def check_cards(self):
         if self.player_card.card_value > self.computer_card.card_value:
             print("player wins")
+            winner = "player"
         elif self.player_card.card_value < self.computer_card.card_value:
             print("computer wins")
+            winner = "computer"
         else:
             print("draw")
-        return [self.player_card, self.computer_card]
+        return winner, [self.player_card, self.computer_card]
         
             
         
@@ -123,8 +133,11 @@ def main():
     player_card = player.play_card()
     computer_card = computer.play_card()
     game = Game(player_card, computer_card)
-    cards_to_give = game.check_cards()
-    
+    winner, cards_to_give = game.check_cards()
+    if winner == "player":
+        player.take_cards(cards_to_give)
+    elif winner == "computer":
+        computer.take_cards(cards_to_give)
     
     
 
