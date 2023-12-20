@@ -42,14 +42,36 @@ class Deck:
 
 
 class Player:
-    def __init__(self):
-        ...
+    def __init__(self, ID, player_card_deck):
+        self.ID = ID
+        self.player_card_deck = player_card_deck
+        
+        
+    def play_card(self):
+        #from player card card take the first card from the list
+        card = self.player_card_deck[0]
+        self.player_card_deck.pop(0)
+        return card
+        
+        
 
 class Game:
-    def __init__(self, board_cards):
-        ...
-
-
+    def __init__(self, player_card, computer_card):
+        self.player_card = player_card
+        self.computer_card = computer_card
+        
+        
+    def check_cards(self):
+        if self.player_card.card_value > self.computer_card.card_value:
+            print("player wins")
+        elif self.player_card.card_value < self.computer_card.card_value:
+            print("computer wins")
+        else:
+            print("draw")
+        return [self.player_card, self.computer_card]
+        
+            
+        
 # option 1
 '''deck_of_cards = [
     'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK', 'HA',
@@ -96,9 +118,12 @@ def main():
     player_deck = []
     computer_deck = []
     player_deck, computer_deck = Deck(card_deck, player_deck, computer_deck).deal_cards(card_deck)
-    print(player_deck)
-    print(computer_deck)
-    
+    player = Player("player", player_deck)
+    computer = Player("computer", computer_deck)
+    player_card = player.play_card()
+    computer_card = computer.play_card()
+    game = Game(player_card, computer_card)
+    cards_to_give = game.check_cards()
     
     
     
