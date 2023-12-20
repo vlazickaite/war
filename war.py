@@ -28,8 +28,17 @@ class Deck:
 
         for card in mixed_cards:
             print(card)
-
+        
         return mixed_cards
+    
+    def deal_cards(self, card_deck):
+        mixed_card_deck = self.mix_card_deck(self.card_deck)
+        total_deck_length = int(len(mixed_card_deck) / 2)
+        print(total_deck_length)
+        deck_1 = mixed_card_deck[0:total_deck_length]
+        deck_2 = mixed_card_deck[total_deck_length:]
+        return deck_1, deck_2
+        
 
 
 class Player:
@@ -86,7 +95,13 @@ def main():
 
     player_deck = []
     computer_deck = []
-    mixed_card_deck = Deck(card_deck, player_deck, computer_deck).mix_card_deck(card_deck)
+    player_deck, computer_deck = Deck(card_deck, player_deck, computer_deck).deal_cards(card_deck)
+    print(player_deck)
+    print(computer_deck)
+    
+    
+    
+    
 
    
     
