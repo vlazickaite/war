@@ -1,27 +1,48 @@
 import random
 import sys
 
-class Card():
-    def __init__():
-        ...
-    ...
+class Card:
+    def __init__(self, card_id, card_value):
+        self.card_id = card_id
+        self.card_value = card_value
+    
+    def __str__(self):
+        return(f"ID: {self.card_id}, Value: {self.card_value}")
 
 class Deck:
-    def __init__():
-        ...
-    ...
+    def __init__(self, card_deck, players_deck, computers_deck):
+        self.deck = []
+        self.card_deck = card_deck
+        self.players_deck = players_deck
+        self.computers_deck = computers_deck
+    
+    def mix_card_deck(self, card_deck):
+        mixed_cards = []
+        deck = card_deck
+        list_ids = list(range(0,len(deck)))
+        random.shuffle(list_ids)
+        
+        for i in list_ids:
+            temp_num = int(i)
+            mixed_cards.append(deck[temp_num])
+
+        for card in mixed_cards:
+            print(card)
+
+        return mixed_cards
+
 
 class Player:
-    def __init__():
+    def __init__(self):
         ...
 
 class Game:
-    def __init__():
+    def __init__(self, board_cards):
         ...
 
 
 # option 1
-deck_of_cards = [
+'''deck_of_cards = [
     'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK', 'HA',
     'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'DJ', 'DQ', 'DK', 'DA',
     'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'CJ', 'CQ', 'CK', 'CA',
@@ -30,7 +51,7 @@ deck_of_cards = [
 
 # option 2
 deck_of_cards = [
-    Card('H', '2'), Card('H', '3'), Card('H', '4'), Card('H', '5'), Card('H', '6'),
+    Card('H2', '2'), Card('H3', '3'), Card('H4', '4'), Card('H', '5'), Card('H', '6'),
     Card('H', '7'), Card('H', '8'), Card('H', '9'), Card('H', '10'), Card('H', 'J'),
     Card('H', 'Q'), Card('H', 'K'), Card('H', 'A'),
 
@@ -45,4 +66,30 @@ deck_of_cards = [
     Card('S', '2'), Card('S', '3'), Card('S', '4'), Card('S', '5'), Card('S', '6'),
     Card('S', '7'), Card('S', '8'), Card('S', '9'), Card('S', '10'), Card('S', 'J'),
     Card('S', 'Q'), Card('S', 'K'), Card('S', 'A')
-]
+]'''
+
+def main():
+    deck = [
+        {"card_id" : "H2", "card_value" : 2},
+        {"card_id" : "H3", "card_value" : 3},
+        {"card_id" : "H4", "card_value" : 4},
+        {"card_id" : "H5", "card_value" : 5},
+        {"card_id" : "H6", "card_value" : 6},
+        {"card_id" : "H7", "card_value" : 7}
+    ]
+    card_deck = []
+    for card in deck:
+        temp_card = ''
+        temp_card = Card(card["card_id"], card["card_value"])
+        card_deck.append(temp_card)
+        # print(temp_card.card_id)
+
+    player_deck = []
+    computer_deck = []
+    mixed_card_deck = Deck(card_deck, player_deck, computer_deck).mix_card_deck(card_deck)
+
+   
+    
+
+
+main()
