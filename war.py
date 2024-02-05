@@ -1,6 +1,12 @@
 import random
-import sys
-
+'''
+War card game implementation
+Classes of:
+Card (define cards in a deck), 
+Deck (shuffle the deck and deal to two players),
+Player (defining players actions - give and take cards) and
+Game (define stage of the game, if there is the winner, or there is draw).
+'''
 class Card:
     def __init__(self, card_id, card_value):
         self.card_id = card_id
@@ -10,35 +16,20 @@ class Card:
         return(f"ID: {self.card_id}, Value: {self.card_value}")
 
 class Deck:
-    def __init__(self, card_deck, players_deck, computers_deck):
-        self.deck = []
-        self.card_deck = card_deck
-        self.players_deck = players_deck
-        self.computers_deck = computers_deck
+    def __init__(self, card_deck):
+        self.deck = self.mix_card_deck(card_deck)
+        self.players_deck, self.computers_deck = self.deal_cards()
     
     def mix_card_deck(self, card_deck):
-        mixed_cards = []
-        deck = card_deck
-        list_ids = list(range(0,len(deck)))
-        random.shuffle(list_ids)
-        
-        for i in list_ids:
-            temp_num = int(i)
-            mixed_cards.append(deck[temp_num])
-
-        for card in mixed_cards:
-            print(card)
-        
+        mixed_cards = list(card_deck)
+        random.shuffle(mixed_cards)
         return mixed_cards
     
-    def deal_cards(self, card_deck):
-        mixed_card_deck = self.mix_card_deck(self.card_deck)
-        total_deck_length = int(len(mixed_card_deck) / 2)
-        print(total_deck_length)
-        deck_1 = mixed_card_deck[0:total_deck_length]
-        deck_2 = mixed_card_deck[total_deck_length:]
-        return deck_1, deck_2
-        
+    def deal_cards(self):
+        total_deck_length = len(self.deck) // 2
+        deck_1 = self.deck[:total_deck_length]
+        deck_2 = self.deck[total_deck_length:]
+        return deck_1, deck_2 
 
 
 class Player:
@@ -47,21 +38,12 @@ class Player:
         self.player_card_deck = player_card_deck
         
     def play_card(self):
-        #from player card card take the first card from the list
-        card = self.player_card_deck[0]
-        self.player_card_deck.pop(0)
+        card = self.player_card_deck.pop(0)
         return card
     
     def take_cards(self, won_cards):
-        print("pries pridedant laimetas kortas", self.player_card_deck)
-        self.player_card_deck.append(won_cards)
-        print("po pridedimo laimetu kortu", self.player_card_deck)
-        
-        
-        
-        
-        
-        
+        self.player_card_deck.extend(won_cards)
+
 
 class Game:
     def __init__(self, player_card, computer_card):
@@ -71,78 +53,133 @@ class Game:
         
     def check_cards(self):
         if self.player_card.card_value > self.computer_card.card_value:
-            print("player wins")
-            winner = "player"
+            return "player"
         elif self.player_card.card_value < self.computer_card.card_value:
-            print("computer wins")
-            winner = "computer"
+            return "computer"
         else:
             print("draw")
-        return winner, [self.player_card, self.computer_card]
+        return "draw"
         
-            
-        
-# option 1
-'''deck_of_cards = [
-    'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK', 'HA',
-    'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'DJ', 'DQ', 'DK', 'DA',
-    'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'CJ', 'CQ', 'CK', 'CA',
-    'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'SJ', 'SQ', 'SK', 'SA'
-]
-
-# option 2
-deck_of_cards = [
-    Card('H2', '2'), Card('H3', '3'), Card('H4', '4'), Card('H', '5'), Card('H', '6'),
-    Card('H', '7'), Card('H', '8'), Card('H', '9'), Card('H', '10'), Card('H', 'J'),
-    Card('H', 'Q'), Card('H', 'K'), Card('H', 'A'),
-
-    Card('D', '2'), Card('D', '3'), Card('D', '4'), Card('D', '5'), Card('D', '6'),
-    Card('D', '7'), Card('D', '8'), Card('D', '9'), Card('D', '10'), Card('D', 'J'),
-    Card('D', 'Q'), Card('D', 'K'), Card('D', 'A'),
-
-    Card('C', '2'), Card('C', '3'), Card('C', '4'), Card('C', '5'), Card('C', '6'),
-    Card('C', '7'), Card('C', '8'), Card('C', '9'), Card('C', '10'), Card('C', 'J'),
-    Card('C', 'Q'), Card('C', 'K'), Card('C', 'A'),
-
-    Card('S', '2'), Card('S', '3'), Card('S', '4'), Card('S', '5'), Card('S', '6'),
-    Card('S', '7'), Card('S', '8'), Card('S', '9'), Card('S', '10'), Card('S', 'J'),
-    Card('S', 'Q'), Card('S', 'K'), Card('S', 'A')
-]'''
-
+'''
+Main function has the defined deck of card ID and card value.
+Card ID values stands for:
+H - Hearts, D - Diamonds, C - Clubs, S - Spades, A - Ace, J - Jack, Q - Queen, K - King;
+2-10 - numbers 2-10.
+Functionality:
+Card values are read through the Card class.
+Deck is shuffled and dealt through Deck class.
+Players are defined and their decks dealt with Player class.
+Main while block:
+Checks if the players are out of cards;
+Players play the cards, checking card values and defining the round winner.
+If draw block:
+Played cards are put into the list, running while loop for players to play the cards.
+Checking if there is draw again.
+Once the winner is set, all cards add to the winner's deck.
+'''
 def main():
     deck = [
+        {"card_id" : "HA", "card_value" : 1},
         {"card_id" : "H2", "card_value" : 2},
         {"card_id" : "H3", "card_value" : 3},
         {"card_id" : "H4", "card_value" : 4},
         {"card_id" : "H5", "card_value" : 5},
         {"card_id" : "H6", "card_value" : 6},
-        {"card_id" : "H7", "card_value" : 7}
+        {"card_id" : "H7", "card_value" : 7},
+        {"card_id" : "H8", "card_value" : 8},
+        {"card_id" : "H9", "card_value" : 9},
+        {"card_id" : "H10", "card_value" : 10},
+        {"card_id" : "HJ", "card_value" : 11},
+        {"card_id" : "HQ", "card_value" : 12},
+        {"card_id" : "HK", "card_value" : 13},
+        {"card_id" : "DA", "card_value" : 1},
+        {"card_id" : "D2", "card_value" : 2},
+        {"card_id" : "D3", "card_value" : 3},
+        {"card_id" : "D4", "card_value" : 4},
+        {"card_id" : "D5", "card_value" : 5},
+        {"card_id" : "D6", "card_value" : 6},
+        {"card_id" : "D7", "card_value" : 7},
+        {"card_id" : "D8", "card_value" : 8},
+        {"card_id" : "D9", "card_value" : 9},
+        {"card_id" : "D10", "card_value" : 10},
+        {"card_id" : "DJ", "card_value" : 11},
+        {"card_id" : "DQ", "card_value" : 12},
+        {"card_id" : "DK", "card_value" : 13},
+        {"card_id" : "CA", "card_value" : 1},
+        {"card_id" : "C2", "card_value" : 2},
+        {"card_id" : "C3", "card_value" : 3},
+        {"card_id" : "C4", "card_value" : 4},
+        {"card_id" : "C5", "card_value" : 5},
+        {"card_id" : "C6", "card_value" : 6},
+        {"card_id" : "C7", "card_value" : 7},
+        {"card_id" : "C8", "card_value" : 8},
+        {"card_id" : "C9", "card_value" : 9},
+        {"card_id" : "C10", "card_value" : 10},
+        {"card_id" : "CJ", "card_value" : 11},
+        {"card_id" : "CQ", "card_value" : 12},
+        {"card_id" : "CK", "card_value" : 13},
+        {"card_id" : "SA", "card_value" : 1},
+        {"card_id" : "S2", "card_value" : 2},
+        {"card_id" : "S3", "card_value" : 3},
+        {"card_id" : "S4", "card_value" : 4},
+        {"card_id" : "S5", "card_value" : 5},
+        {"card_id" : "S6", "card_value" : 6},
+        {"card_id" : "S7", "card_value" : 7},
+        {"card_id" : "S8", "card_value" : 8},
+        {"card_id" : "S9", "card_value" : 9},
+        {"card_id" : "S10", "card_value" : 10},
+        {"card_id" : "SJ", "card_value" : 11},
+        {"card_id" : "SQ", "card_value" : 12},
+        {"card_id" : "SK", "card_value" : 13},
+        
     ]
-    card_deck = []
-    for card in deck:
-        temp_card = ''
-        temp_card = Card(card["card_id"], card["card_value"])
-        card_deck.append(temp_card)
-        # print(temp_card.card_id)
 
-    player_deck = []
-    computer_deck = []
-    player_deck, computer_deck = Deck(card_deck, player_deck, computer_deck).deal_cards(card_deck)
-    player = Player("player", player_deck)
-    computer = Player("computer", computer_deck)
-    player_card = player.play_card()
-    computer_card = computer.play_card()
-    game = Game(player_card, computer_card)
-    winner, cards_to_give = game.check_cards()
-    if winner == "player":
-        player.take_cards(cards_to_give)
-    elif winner == "computer":
-        computer.take_cards(cards_to_give)
-    
-    
+    card_deck = [Card(card["card_id"], card["card_value"]) for card in deck]
+    game_deck = Deck(card_deck)
 
-   
-    
+    player = Player("player", game_deck.players_deck)
+    computer = Player("computer", game_deck.computers_deck)
+
+    while True:
+        if not player.player_card_deck:
+            print("Computer wins! Player is out of cards.")
+            break
+        elif not computer.player_card_deck:
+            print("Player wins! Computer is out of cards.")
+            break
+
+        player_card = player.play_card()
+        computer_card = computer.play_card()
+
+        game = Game(player_card, computer_card)
+        winner = game.check_cards()
+
+        if winner == "draw":
+            print("It's a draw. Time for war.")
+            war_cards = [player_card, computer_card]
+            while True:
+                war_cards.extend(player.player_card_deck[:3])
+                war_cards.extend(computer.player_card_deck[:3])
+                player_card = player.play_card()
+                computer_card = computer.play_card()
+                war_cards.extend([player_card, computer_card])
+                
+                war_winner = Game(player_card, computer_card).check_cards()
+                if war_winner != "draw":
+                    print(f"War winner: {war_winner}")
+                    if war_winner == "player":
+                        player.take_cards(war_cards)
+                    else:
+                        computer.take_cards(war_cards)
+                    break
+                else:
+                    print("War continues!")
+        elif winner == "player":
+            player.take_cards([player_card, computer_card])
+        elif winner == "computer":
+            computer.take_cards([player_card, computer_card])
 
 
-main()
+
+if __name__ == "__main__":
+    main()
